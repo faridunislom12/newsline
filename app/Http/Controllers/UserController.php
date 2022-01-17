@@ -109,10 +109,12 @@ class UserController extends Controller
     {
         try {
             $validated = $request->validated();
-            $key = array_key_first($validated['component_columns']);
-            $value = $validated['component_columns'][$key];
-            $validated['component_columns'] = $user->component_columns;
-            $validated['component_columns'][$key] = $value;
+            if (isset($validated['component_columns'])) {
+                $key = array_key_first($validated['component_columns']);
+                $value = $validated['component_columns'][$key];
+                $validated['component_columns'] = $user->component_columns;
+                $validated['component_columns'][$key] = $value;
+            }
             $user->update($validated);
             if ($request->role_id) {
                 $user->roles()->sync([$request->role_id]);
